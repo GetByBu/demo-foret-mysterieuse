@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="fr">
+<title>Réservation Forêt Mystérieuse</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Modern+Antiqua&family=Josefin+Sans:wght@400;500;600;700&display=swap">
+<style>
+/* DA reprise du site laforetmysterieuse.com : fond beige, vert olive, Modern Antiqua + Josefin Sans. Thème clair unique, comme le site. */
+:root{
+  color-scheme:light;
+  --bg:#f3ede2; --surface:#fbf8f1; --ink:#25332b; --muted:#666666; --line:#ddd3c1;
+  --moss:#5c6a15; --moss-ink:#ffffff; --amber:#5c6a15; --amber-soft:#e9ecd6;
+  --ok:#4d7a2a; --off:#aaa398; --ex:#ebe4d6; --night:#151112;
+  --display:"Modern Antiqua", Georgia, serif; --body:"Josefin Sans", Helvetica, Arial, sans-serif;
+}
+.topbar{background:var(--moss);color:#fff;font-size:13px;padding:6px 0;text-align:center;margin-inline:calc(-1 * max(16px,env(safe-area-inset-left,0px)))}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{width:220px;max-width:60vw;height:auto}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font:17px/1.5 var(--body);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 48px}
+.wrap{max-width:860px;margin:0 auto;display:flex;flex-direction:column;gap:20px;min-width:0}
+.wrap .wrap{width:100%;max-width:none;margin:0}
+.step>*{min-width:0}
+.demo{background:var(--amber-soft);color:var(--ink);border:1px dashed var(--amber);border-radius:8px;padding:8px 12px;font-size:14px;margin-top:16px}
+.demo b{color:var(--amber)}
+header h1{font:700 clamp(28px,5vw,40px)/1.1 var(--display);margin:8px 0 4px;text-wrap:balance;color:var(--moss)}
+header p{margin:0;color:var(--muted)}
+.tabs{display:flex;gap:6px;border-bottom:1px solid var(--line)}
+.tabs button{font:500 16px var(--body);background:none;border:0;padding:10px 14px;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-1px}
+.tabs button[aria-selected="true"]{color:var(--ink);border-color:var(--amber)}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+section.step{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:12px}
+.step h2{font:600 22px var(--body);margin:0;display:flex;gap:10px;align-items:baseline}
+.step h2 .n{font:700 14px var(--body);color:var(--moss-ink);background:var(--moss);border-radius:50%;width:26px;height:26px;display:inline-grid;place-items:center;flex:none}
+.adv{display:grid;grid-template-columns:1fr auto;gap:6px 16px}
+.adv h3{margin:0;font:700 20px var(--display)}
+.adv p{margin:0;color:var(--muted);max-width:60ch}
+.facts{display:flex;flex-wrap:wrap;gap:8px;grid-column:1/-1}
+.chip{font-size:14px;border:1px solid var(--line);border-radius:999px;padding:2px 10px;color:var(--muted)}
+.price{font:700 22px var(--display);color:var(--amber);text-align:right;white-space:nowrap}
+.price small{display:block;font:400 13px var(--body);color:var(--muted)}
+.days{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
+.day{flex:none;width:76px;border:1px solid var(--line);background:var(--bg);border-radius:8px;padding:8px 4px;text-align:center;cursor:pointer;color:var(--ink);font:inherit}
+.day .d{font:700 22px var(--display);display:block}
+.day small{display:block;color:var(--muted);font-size:13px}
+.day[aria-pressed="true"]{background:var(--moss);color:var(--moss-ink);border-color:var(--moss)}
+.day[aria-pressed="true"] small{color:var(--moss-ink)}
+.slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:8px}
+.slot{font:inherit;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:8px;padding:8px;cursor:pointer;text-align:left;font-variant-numeric:tabular-nums}
+.slot b{display:block;font-size:18px}
+.slot small{color:var(--ok);font-size:13px}
+.slot:disabled{cursor:not-allowed;color:var(--off);background:transparent;border-style:dashed}
+.slot:disabled small{color:var(--off)}
+.slot[aria-pressed="true"]{border:2px solid var(--amber);background:var(--amber-soft)}
+.note{font-size:14px;color:var(--muted);margin:0}
+.row{display:flex;flex-wrap:wrap;gap:12px}
+.field{display:flex;flex-direction:column;gap:4px;flex:1 1 200px;min-width:0}
+label{font-size:14px;color:var(--muted)}
+input,select{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:9px 10px;width:100%}
+.stepper{display:flex;align-items:center;gap:10px}
+.stepper button{width:40px;height:40px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font-size:20px;cursor:pointer}
+.stepper output{font:700 24px var(--display);min-width:2ch;text-align:center}
+.recap{display:grid;grid-template-columns:auto 1fr;gap:4px 16px;font-variant-numeric:tabular-nums}
+.recap dt{color:var(--muted)} .recap dd{margin:0}
+.total{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--line);padding-top:12px;gap:12px;flex-wrap:wrap}
+.total strong{font:700 26px var(--display)}
+.pay{font:700 17px var(--body);background:var(--amber);color:#fff;border:0;border-radius:8px;padding:12px 20px;cursor:pointer}
+.pay:disabled{background:var(--off);cursor:not-allowed}
+.err{color:var(--amber);font-size:14px;margin:0}
+.confirm{border-color:var(--ok)}
+.confirm h2{color:var(--ok)}
+/* Planning équipe */
+.cfg{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.tl{overflow-x:auto}
+.tl-inner{min-width:640px;display:flex;flex-direction:column;gap:6px}
+.axis,.lane{display:grid;grid-template-columns:120px 1fr;align-items:center;gap:8px}
+.axis .ticks{position:relative;height:20px;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.axis .ticks span{position:absolute;transform:translateX(-50%)}
+.lane .who{font-size:14px;font-weight:700}
+.lane .track{position:relative;height:54px;background:var(--bg);border:1px solid var(--line);border-radius:6px;
+  background-image:repeating-linear-gradient(90deg,transparent 0,transparent calc(var(--hour) - 1px),var(--line) calc(var(--hour) - 1px),var(--line) var(--hour))}
+.blk{position:absolute;top:4px;bottom:4px;border-radius:5px;padding:3px 6px;font-size:12px;line-height:1.25;overflow:hidden;color:var(--moss-ink);background:var(--moss)}
+.blk.ex{background:var(--ex);color:var(--ink);border:1px solid var(--line)}
+.blk.new{background:var(--amber);color:#fff}
+.blk .buf{position:absolute;top:0;bottom:0;right:0;background:repeating-linear-gradient(45deg,transparent 0 4px,rgba(0,0,0,.18) 4px 6px)}
+table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;font-size:15px}
+th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line)}
+th{font-size:13px;color:var(--muted);font-weight:500;text-transform:uppercase;letter-spacing:.04em}
+.tag{font-size:12px;border-radius:999px;padding:1px 8px;background:var(--ex);color:var(--muted)}
+.tag.new{background:var(--amber);color:#fff}
+@media (prefers-reduced-motion:no-preference){.slot,.day{transition:background .15s,border-color .15s}}
+</style>
+
+<div class="topbar">07 86 37 33 59 · La Petite Cassagne, 24590 Saint-Geniès</div>
+<div class="wrap">
+  <div class="demo"><b>Maquette de démonstration</b> préparée pour Adrien. Aucune réservation ni aucun paiement n'est réel. Le prix et les règles de planning sont des exemples à ajuster.</div>
+  <header>
+    <div class="brand"><img src="https://laforetmysterieuse.com/wp-content/uploads/2025/05/logo-vert-slogan.png" alt="La Forêt Mystérieuse"></div>
+    <h1>Réservez votre aventure jouée</h1>
+    <p>Une quête en forêt avec un maître du jeu et des personnages joués par des comédiens.</p>
+  </header>
+
+  <nav class="tabs" role="tablist">
+    <button role="tab" id="tab-v" aria-selected="true" aria-controls="view-v">Côté visiteur</button>
+    <button role="tab" id="tab-e" aria-selected="false" aria-controls="view-e">Côté équipe · planning</button>
+  </nav>
+
+  <div id="view-v" role="tabpanel" aria-labelledby="tab-v" class="wrap">
+    <section class="step">
+      <h2><span class="n">1</span>L'aventure</h2>
+      <div class="adv">
+        <div>
+          <h3>La Vengeance d'Asresh</h3>
+          <p>Votre groupe choisit ses classes, puis part en forêt avec un maître du jeu. Sur le chemin, les habitants de Natiseniseg vous parlent, vous piègent ou vous aident.</p>
+        </div>
+        <div class="price"><span id="prixAff">25 €</span><small>par joueur · prix indicatif</small></div>
+        <div class="facts">
+          <span class="chip" id="factDuree">Durée 2 h 30</span>
+          <span class="chip" id="factJoueurs">4 à 8 joueurs</span>
+          <span class="chip">Dès 8 ans</span>
+          <span class="chip">Maître du jeu présent</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="step">
+      <h2><span class="n">2</span>Le jour</h2>
+      <div class="days" id="days" role="group" aria-label="Jours d'ouverture"></div>
+      <p class="note">Ouvert le mercredi, le samedi et le dimanche dans cette démonstration.</p>
+    </section>
+
+    <section class="step">
+      <h2><span class="n">3</span>L'heure de départ</h2>
+      <div class="slots" id="slots"></div>
+      <p class="note" id="slotNote"></p>
+    </section>
+
+    <section class="step">
+      <h2><span class="n">4</span>Votre groupe</h2>
+      <div class="row">
+        <div class="field" style="flex:0 0 auto">
+          <label for="nb">Nombre de joueurs</label>
+          <div class="stepper"><button type="button" id="moins" aria-label="Un joueur de moins">−</button><output id="nb">4</output><button type="button" id="plus" aria-label="Un joueur de plus">+</button></div>
+        </div>
+        <div class="field"><label for="nom">Nom du responsable du groupe</label><input id="nom" autocomplete="name" placeholder="Camille Durand"></div>
+      </div>
+      <div class="row">
+        <div class="field"><label for="mail">E-mail (pour la confirmation)</label><input id="mail" type="email" autocomplete="email" placeholder="camille@exemple.fr"></div>
+        <div class="field"><label for="tel">Téléphone</label><input id="tel" type="tel" autocomplete="tel" placeholder="06 12 34 56 78"></div>
+      </div>
+      <div class="field"><label for="occ">Occasion</label>
+        <select id="occ"><option>Sortie en famille</option><option>Anniversaire</option><option>Entre amis</option><option>Entreprise / team building</option></select></div>
+    </section>
+
+    <section class="step">
+      <h2><span class="n">5</span>Récapitulatif et paiement</h2>
+      <dl class="recap" id="recap"></dl>
+      <div class="total"><span>Total à régler</span><strong id="total">—</strong></div>
+      <p class="err" id="err" hidden></p>
+      <button class="pay" id="pay" type="button">Payer et réserver</button>
+      <p class="note">Dans la version réelle, ce bouton ouvre le paiement sécurisé (Stripe ou équivalent) puis envoie un e-mail de confirmation.</p>
+    </section>
+
+    <section class="step confirm" id="confirm" hidden>
+      <h2>Aventure réservée</h2>
+      <p id="confirmTxt"></p>
+      <p class="note">Ouvrez l'onglet « Côté équipe » : la session apparaît déjà dans le planning, avec un maître du jeu attribué.</p>
+      <button class="pay" type="button" id="again">Faire une autre réservation</button>
+    </section>
+  </div>
+
+  <div id="view-e" role="tabpanel" aria-labelledby="tab-e" class="wrap" hidden>
+    <section class="step">
+      <h2>Règles de génération des créneaux</h2>
+      <p class="note">Modifiez une règle : les heures proposées aux visiteurs se recalculent aussitôt.</p>
+      <div class="cfg">
+        <div class="field"><label for="cDuree">Durée d'une aventure (min)</label><input id="cDuree" type="number" min="60" max="240" step="15" value="150"></div>
+        <div class="field"><label for="cBuf">Battement entre deux groupes (min)</label><input id="cBuf" type="number" min="0" max="90" step="15" value="30"></div>
+        <div class="field"><label for="cMJ">Maîtres du jeu disponibles</label><input id="cMJ" type="number" min="1" max="4" value="2"></div>
+        <div class="field"><label for="cPas">Départ possible toutes les (min)</label><input id="cPas" type="number" min="15" max="120" step="15" value="30"></div>
+        <div class="field"><label for="cMax">Joueurs max par groupe</label><input id="cMax" type="number" min="2" max="20" value="8"></div>
+        <div class="field"><label for="cPrix">Prix par joueur (€)</label><input id="cPrix" type="number" min="0" step="1" value="25"></div>
+      </div>
+    </section>
+
+    <section class="step">
+      <h2>Planning du jour</h2>
+      <div class="days" id="daysE" role="group" aria-label="Jour du planning"></div>
+      <div class="tl"><div class="tl-inner" id="timeline"></div></div>
+      <p class="note">Zone hachurée : battement pour remettre le parcours en place. Les sessions grisées sont des exemples.</p>
+      <div class="tl"><table><thead><tr><th>Départ</th><th>Fin</th><th>Maître du jeu</th><th>Groupe</th><th>Joueurs</th><th>Montant</th></tr></thead><tbody id="tbody"></tbody></table></div>
+    </section>
+  </div>
+</div>
+
+<script>
+const cfg={duree:150,buf:30,nbMJ:2,pas:30,max:8,min:4,prix:25,open:9*60+30,close:19*60,jours:[0,3,6]};
+const MJ=["Le Tavernier","Otuga","Maître du jeu 3","Maître du jeu 4"];
+const JOURS=["dim.","lun.","mar.","mer.","jeu.","ven.","sam."];
+const MOIS=["janv.","févr.","mars","avr.","mai","juin","juil.","août","sept.","oct.","nov.","déc."];
+const iso=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+const hm=m=>Math.floor(m/60)+"h"+String(m%60).padStart(2,"0");
+const eur=n=>n.toLocaleString("fr-FR")+" €";
+
+// Jours ouverts : les 12 prochains à partir de demain
+const openDays=[];{const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()+1);while(openDays.length<12){if(cfg.jours.includes(d.getDay()))openDays.push(new Date(d));d.setDate(d.getDate()+1);}}
+
+// Réservations d'exemple sur les premiers jours
+let bookings=[];let nextId=1042;
+const seed=[[0,600,0,6,"Famille Martin"],[0,630,1,5,"Anniversaire de Léo"],[0,900,0,8,"CE Périgord Bois"],[1,570,0,4,"Famille Nguyen"],[1,810,1,7,"Amis de Sarlat"],[2,690,0,6,"Famille Roux"],[2,720,1,8,"Club de jeu de rôle"],[2,900,0,5,"Famille Bernard"]];
+seed.forEach(([i,s,mj,j,n])=>bookings.push({id:nextId++,date:iso(openDays[i]),start:s,mj,joueurs:j,nom:n,ex:true}));
+
+const occ=(b)=>[b.start,b.start+cfg.duree+cfg.buf];
+function freeMJ(date,t){const end=t+cfg.duree+cfg.buf;for(let m=0;m<cfg.nbMJ;m++){const clash=bookings.some(b=>b.date===date&&b.mj===m&&!(occ(b)[1]<=t||occ(b)[0]>=end));if(!clash)return m;}return -1;}
+function slotsFor(date){const out=[];for(let t=cfg.open;t+cfg.duree<=cfg.close;t+=cfg.pas){let n=0;for(let m=0;m<cfg.nbMJ;m++){const end=t+cfg.duree+cfg.buf;if(!bookings.some(b=>b.date===date&&b.mj===m&&!(occ(b)[1]<=t||occ(b)[0]>=end)))n++;}out.push({t,n});}return out;}
+
+let state={day:iso(openDays[0]),slot:null,nb:4,eDay:iso(openDays[0])};
+const $=id=>document.getElementById(id);
+
+function renderDays(el,key,onPick){el.innerHTML="";openDays.forEach(d=>{const k=iso(d);const b=document.createElement("button");b.type="button";b.className="day";b.setAttribute("aria-pressed",String(state[key]===k));
+  const libres=slotsFor(k).filter(s=>s.n>0).length;
+  b.innerHTML=`<small>${JOURS[d.getDay()]}</small><span class="d">${d.getDate()}</span><small>${MOIS[d.getMonth()]}</small>`;
+  b.title=libres+" départs possibles";b.onclick=()=>{state[key]=k;onPick();};el.appendChild(b);});}
+
+function renderSlots(){const el=$("slots");el.innerHTML="";const list=slotsFor(state.day);let libres=0;
+  list.forEach(s=>{const b=document.createElement("button");b.type="button";b.className="slot";b.disabled=s.n===0;if(s.n)libres++;
+    b.setAttribute("aria-pressed",String(state.slot===s.t));
+    b.innerHTML=`<b>${hm(s.t)}</b><small>${s.n?("retour vers "+hm(s.t+cfg.duree)):"complet"}</small>`;
+    b.onclick=()=>{state.slot=s.t;renderSlots();renderRecap();};el.appendChild(b);});
+  if(state.slot!==null&&!list.find(s=>s.t===state.slot&&s.n>0))state.slot=null;
+  $("slotNote").textContent=`${libres} départs possibles ce jour-là. Les heures sont calculées automatiquement selon le nombre de maîtres du jeu libres.`;}
+
+function renderRecap(){const d=openDays.find(x=>iso(x)===state.day);const tot=state.nb*cfg.prix;
+  $("recap").innerHTML=`<dt>Aventure</dt><dd>La Vengeance d'Asresh</dd><dt>Date</dt><dd>${JOURS[d.getDay()]} ${d.getDate()} ${MOIS[d.getMonth()]} ${d.getFullYear()}</dd><dt>Départ</dt><dd>${state.slot===null?"à choisir":hm(state.slot)+" (fin vers "+hm(state.slot+cfg.duree)+")"}</dd><dt>Joueurs</dt><dd>${state.nb} × ${eur(cfg.prix)}</dd>`;
+  $("total").textContent=eur(tot);$("pay").textContent="Payer "+eur(tot)+" et réserver";}
+
+function renderFacts(){$("prixAff").textContent=eur(cfg.prix);const h=Math.floor(cfg.duree/60),m=cfg.duree%60;$("factDuree").textContent="Durée "+h+" h"+(m?" "+String(m).padStart(2,"0"):"");$("factJoueurs").textContent=cfg.min+" à "+cfg.max+" joueurs";}
+
+function renderVisitor(){renderDays($("days"),"day",()=>{state.slot=null;renderVisitor();});renderSlots();renderRecap();renderFacts();$("nb").textContent=state.nb;}
+
+function renderTeam(){renderDays($("daysE"),"eDay",renderTeam);
+  const span=cfg.close+cfg.buf-cfg.open, pct=m=>((m-cfg.open)/span*100)+"%";
+  const tl=$("timeline");tl.style.setProperty("--hour",(60/span*100)+"%");
+  let ax='<div class="axis"><span></span><div class="ticks">';for(let h=Math.ceil(cfg.open/60)*60;h<=cfg.close;h+=60)ax+=`<span style="left:${pct(h)}">${h/60}h</span>`;ax+="</div></div>";
+  let lanes="";const day=bookings.filter(b=>b.date===state.eDay).sort((a,b)=>a.start-b.start);
+  for(let m=0;m<cfg.nbMJ;m++){lanes+=`<div class="lane"><span class="who">${MJ[m]}</span><div class="track" style="--hour:${60/span*100}%">`;
+    day.filter(b=>b.mj===m).forEach(b=>{const w=(cfg.duree+cfg.buf)/span*100,bw=cfg.buf/(cfg.duree+cfg.buf)*100;
+      lanes+=`<div class="blk ${b.ex?"ex":"new"}" style="left:${pct(b.start)};width:${w}%"><b>${hm(b.start)}</b> · ${b.nom}<br>${b.joueurs} joueurs<span class="buf" style="width:${bw}%"></span></div>`;});
+    lanes+="</div></div>";}
+  tl.innerHTML=ax+lanes;
+  $("tbody").innerHTML=day.length?day.map(b=>`<tr><td>${hm(b.start)}</td><td>${hm(b.start+cfg.duree)}</td><td>${MJ[b.mj]||"—"}</td><td>${b.nom} <span class="tag ${b.ex?"":"new"}">${b.ex?"exemple":"nouvelle"}</span></td><td>${b.joueurs}</td><td>${eur(b.joueurs*cfg.prix)}</td></tr>`).join(""):`<tr><td colspan="6">Aucune session ce jour-là.</td></tr>`;}
+
+// Onglets
+function show(v){const vis=v==="v";$("view-v").hidden=!vis;$("view-e").hidden=vis;$("tab-v").setAttribute("aria-selected",String(vis));$("tab-e").setAttribute("aria-selected",String(!vis));vis?renderVisitor():renderTeam();}
+$("tab-v").onclick=()=>show("v");$("tab-e").onclick=()=>show("e");
+
+$("moins").onclick=()=>{state.nb=Math.max(cfg.min,state.nb-1);$("nb").textContent=state.nb;renderRecap();};
+$("plus").onclick=()=>{state.nb=Math.min(cfg.max,state.nb+1);$("nb").textContent=state.nb;renderRecap();};
+
+$("pay").onclick=()=>{const err=$("err");const nom=$("nom").value.trim(),mail=$("mail").value.trim();
+  let msg="";if(state.slot===null)msg="Choisissez une heure de départ à l'étape 3.";else if(!nom)msg="Indiquez le nom du responsable du groupe.";else if(!/^\S+@\S+\.\S+$/.test(mail))msg="Indiquez une adresse e-mail valide pour recevoir la confirmation.";
+  if(msg){err.textContent=msg;err.hidden=false;return;}err.hidden=true;
+  const mj=freeMJ(state.day,state.slot);if(mj<0){err.textContent="Ce départ vient d'être complété. Choisissez une autre heure.";err.hidden=false;renderSlots();return;}
+  const b={id:nextId++,date:state.day,start:state.slot,mj,joueurs:state.nb,nom:"Groupe "+nom,ex:false};bookings.push(b);
+  const d=openDays.find(x=>iso(x)===state.day);
+  $("confirmTxt").textContent=`Réservation n° FM-${b.id} : ${state.nb} joueurs le ${JOURS[d.getDay()]} ${d.getDate()} ${MOIS[d.getMonth()]}, départ ${hm(state.slot)}. Maître du jeu attribué automatiquement : ${MJ[mj]}. Montant : ${eur(state.nb*cfg.prix)} (démonstration, rien n'a été débité).`;
+  $("confirm").hidden=false;state.eDay=state.day;state.slot=null;renderVisitor();$("confirm").scrollIntoView({behavior:"smooth",block:"center"});};
+$("again").onclick=()=>{$("confirm").hidden=true;window.scrollTo({top:0,behavior:"smooth"});};
+
+[["cDuree","duree"],["cBuf","buf"],["cMJ","nbMJ"],["cPas","pas"],["cMax","max"],["cPrix","prix"]].forEach(([id,k])=>{$(id).addEventListener("input",e=>{const v=parseInt(e.target.value,10);if(isNaN(v))return;
+  const lim={duree:[60,240],buf:[0,90],nbMJ:[1,4],pas:[15,120],max:[2,20],prix:[0,500]}[k];cfg[k]=Math.min(lim[1],Math.max(lim[0],v));
+  if(k==="max")state.nb=Math.min(state.nb,cfg.max);bookings=bookings.filter(b=>b.mj<cfg.nbMJ);renderTeam();});});
+
+renderVisitor();
+</script>
+</html>
